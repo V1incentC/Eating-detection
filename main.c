@@ -158,7 +158,7 @@ uint8_t read_accelerometer()
       
       buffer_position++; //
 
-      printf("%f,%f,%f,%f,%f,%f\n",acc_X[i],acc_Y[i],acc_Z[i],gyr_X[i],gyr_Y[i],gyr_Z[i]);    // printf("%f,%f,%f,%f,%f,%f\n",acc_X[i],acc_Y[i],acc_Z[i],gyr_X[i],gyr_Y[i],gyr_Z[i]);
+      //printf("%f,%f,%f,%f,%f,%f\n",acc_X[i],acc_Y[i],acc_Z[i],gyr_X[i],gyr_Y[i],gyr_Z[i]);    // printf("%f,%f,%f,%f,%f,%f\n",acc_X[i],acc_Y[i],acc_Z[i],gyr_X[i],gyr_Y[i],gyr_Z[i]);
       nrf_delay_ms(5);
       if(buffer_position >= BUFFER_SIZE){ buffer_position = 0; return 1;}  //reset the buffer and returns "1" as a sign that the buffer is full
     }
