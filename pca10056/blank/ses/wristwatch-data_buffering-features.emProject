@@ -72,6 +72,7 @@
       <file file_name="../../../../../../modules/nrfx/drivers/src/nrfx_twim.c" />
       <file file_name="../../../../../../integration/nrfx/legacy/nrf_drv_twi.c" />
       <file file_name="lsm6dsl_reg.c" />
+      <file file_name="../../../../wristband_gyro_and_accelometer_DSP_include/pca10056/blank/ses/lsm6dsl_reg.h" />
     </folder>
     <folder Name="Application">
       <file file_name="../../../main.c" />

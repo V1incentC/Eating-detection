@@ -54,6 +54,35 @@ float_t lsm6dsl_from_fs16g_to_mg(int16_t lsb)
 {
   return ((float_t)lsb * 0.488f);
 }
+float_t lsm6dsl_from_fs125dps_to_mdps(int16_t lsb)
+{
+  return ((float_t)lsb * 4.375f);
+}
+
+float_t lsm6dsl_from_fs250dps_to_mdps(int16_t lsb)
+{
+  return ((float_t)lsb * 8.750f);
+}
+
+float_t lsm6dsl_from_fs500dps_to_mdps(int16_t lsb)
+{
+  return ((float_t)lsb * 17.50f);
+}
+
+float_t lsm6dsl_from_fs1000dps_to_mdps(int16_t lsb)
+{
+  return ((float_t)lsb * 35.0f);
+}
+
+float_t lsm6dsl_from_fs2000dps_to_mdps(int16_t lsb)
+{
+  return ((float_t)lsb * 70.0f);
+}
+
+float_t lsm6dsl_from_lsb_to_celsius(int16_t lsb)
+{
+  return (((float_t)lsb / 256.0f) + 25.0f);
+}
 //////////////////////////////////////////////////////////////////////////////
 
 

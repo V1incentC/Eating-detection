@@ -53,15 +53,20 @@ static axis3bit16_t data_raw_acceleration;
 static float acceleration_mg[3];
 static uint8_t rst;
 
-#define MAX_SIZE         512
-#define MAX_SIZE_HALF    512/2
-#define WIN_SIZE    227
-#define FREQ        26
-#define BUFFER_SIZE 512
-
-volatile float32_t acc_X[MAX_SIZE_HALF];
-volatile float32_t acc_Y[MAX_SIZE_HALF];
-volatile float32_t acc_Z[MAX_SIZE_HALF];
+#define MAX_SIZE            512
+#define MAX_SIZE_HALF       512/2
+#define WIN_SIZE            227
+#define FREQ                26
+#define BUFFER_SIZE         512
+#define NUM_OF_ACC_WINDOWS  4 //when only acc is read we need to split the fifo in smaller windows
+#define ACC_WINDOW          MAX_SIZE/NUM_OF_ACC_WINDOWS //size of the split acc window
+/*
+ *Accelorometer buffers are bigger at the start because we make the fifo buffer 512 elements long
+ *and it reads only the acc data
+ */
+volatile float32_t acc_X[MAX_SIZE];
+volatile float32_t acc_Y[MAX_SIZE];
+volatile float32_t acc_Z[MAX_SIZE];
 
 volatile float32_t acc_X_filtered[MAX_SIZE];
 volatile float32_t acc_Y_filtered[MAX_SIZE];
@@ -120,36 +125,37 @@ uint8_t read_accelerometer()
     static axis3bit16_t data_raw_acceleration;
     
 
-    for(uint16_t i = 0; i < MAX_SIZE_HALF; i++)
+    for(uint16_t i = 0; i < MAX_SIZE; i++)
     {
         //acc code
         memset(data_raw_acceleration.u8bit, 0x00, 1*sizeof(int16_t));
         lsm6dsl_fifo_raw_data_get(&dev_ctx, data_raw_acceleration.i16bit, (unsigned int)2);
-        value_x = lsm6dsl_from_fs8g_to_mg( data_raw_acceleration.i16bit[0]/1000);
-        acc_X[i] = value_x;
+        value_x = lsm6dsl_from_fs2g_to_mg( data_raw_acceleration.i16bit[0]);
+        acc_X[i] = value_x/1000;
 
        // NRF_LOG_INFO( NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT(acc_X[i]/1000));
         memset(data_raw_acceleration.u8bit, 0x00, 1*sizeof(int16_t));
         lsm6dsl_fifo_raw_data_get(&dev_ctx, data_raw_acceleration.i16bit, (unsigned int)2);
-        value_y = lsm6dsl_from_fs8g_to_mg( data_raw_acceleration.i16bit[0]/1000);
-        acc_Y[i] = value_y;
+        value_y = lsm6dsl_from_fs2g_to_mg( data_raw_acceleration.i16bit[0]);
+        acc_Y[i] = value_y/1000;
 
      //   NRF_LOG_INFO( NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT(acc_Y[i]));
         memset(data_raw_acceleration.u8bit, 0x00, 1*sizeof(int16_t));
         lsm6dsl_fifo_raw_data_get(&dev_ctx, data_raw_acceleration.i16bit, (unsigned int)2);
-        value_z = lsm6dsl_from_fs8g_to_mg( data_raw_acceleration.i16bit[0]/1000);
-        acc_Z[i] = value_z;
+        value_z = lsm6dsl_from_fs2g_to_mg( data_raw_acceleration.i16bit[0]);
+        acc_Z[i] = value_z/1000;
 
       // NRF_LOG_INFO( NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT(acc_Z[i]));  
     
     }
 
     //check if you really need to ignore first 149 samples
+    /*
     filter_data(acc_X,MAX_SIZE_HALF,acc_X_filtered,FILTER_LOWPASS);
     filter_data(acc_Y,MAX_SIZE_HALF,acc_Y_filtered,FILTER_LOWPASS);
     filter_data(acc_Z,MAX_SIZE_HALF,acc_Z_filtered,FILTER_LOWPASS);
-
-    for(int i = 0; i < MAX_SIZE/2 ;i++)
+    */
+    for(int i = 0; i < MAX_SIZE ;i++)
     {
       //store values in acc_N_buffer to make windows that are 512 elements long
       acc_X_buffer[buffer_position] = acc_X[i];
@@ -158,7 +164,7 @@ uint8_t read_accelerometer()
       
       buffer_position++; //
 
-      //printf("%f,%f,%f,%f,%f,%f\n",acc_X[i],acc_Y[i],acc_Z[i],gyr_X[i],gyr_Y[i],gyr_Z[i]);    // printf("%f,%f,%f,%f,%f,%f\n",acc_X[i],acc_Y[i],acc_Z[i],gyr_X[i],gyr_Y[i],gyr_Z[i]);
+      printf("%f,%f,%f,%f,%f,%f\n",acc_X[i],acc_Y[i],acc_Z[i],gyr_X[i],gyr_Y[i],gyr_Z[i]);    // printf("%f,%f,%f,%f,%f,%f\n",acc_X[i],acc_Y[i],acc_Z[i],gyr_X[i],gyr_Y[i],gyr_Z[i]);
       nrf_delay_ms(5);
       if(buffer_position >= BUFFER_SIZE){ buffer_position = 0; return 1;}  //reset the buffer and returns "1" as a sign that the buffer is full
     }
@@ -194,48 +200,48 @@ uint8_t read_accelerometer_gyroscope()
         //gyro code
         memset(data_raw_gyroscope.u8bit, 0x00, 1*sizeof(int16_t));
         lsm6dsl_fifo_raw_data_get(&dev_ctx, data_raw_gyroscope.i16bit, (unsigned int)2);
-        gyr_value_x = lsm6dsl_from_fs8g_to_mg( data_raw_gyroscope.i16bit[0]/1000);
-        gyr_X[i] = gyr_value_x;
+        gyr_value_x = lsm6dsl_from_fs250dps_to_mdps( data_raw_gyroscope.i16bit[0]);
+        gyr_X[i] = gyr_value_x/1000;
        // NRF_LOG_INFO( NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT(acc_X[i]/1000));
         memset(data_raw_gyroscope.u8bit, 0x00, 1*sizeof(int16_t));
         lsm6dsl_fifo_raw_data_get(&dev_ctx, data_raw_gyroscope.i16bit, (unsigned int)2);
-        gyr_value_y = lsm6dsl_from_fs8g_to_mg( data_raw_gyroscope.i16bit[0]/1000);
-        gyr_Y[i] = gyr_value_y;
+        gyr_value_y = lsm6dsl_from_fs250dps_to_mdps( data_raw_gyroscope.i16bit[0]);
+        gyr_Y[i] = gyr_value_y/1000;
      //   NRF_LOG_INFO( NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT(acc_Y[i]));
         memset(data_raw_gyroscope.u8bit, 0x00, 1*sizeof(int16_t));
         lsm6dsl_fifo_raw_data_get(&dev_ctx, data_raw_gyroscope.i16bit, (unsigned int)2);
-        gyr_value_z = lsm6dsl_from_fs8g_to_mg( data_raw_gyroscope.i16bit[0]/1000);
-        gyr_Z[i] = gyr_value_z;
+        gyr_value_z = lsm6dsl_from_fs250dps_to_mdps( data_raw_gyroscope.i16bit[0]);
+        gyr_Z[i] = gyr_value_z/1000;
         
         //acc code
         memset(data_raw_acceleration.u8bit, 0x00, 1*sizeof(int16_t));
         lsm6dsl_fifo_raw_data_get(&dev_ctx, data_raw_acceleration.i16bit, (unsigned int)2);
-        value_x = lsm6dsl_from_fs8g_to_mg( data_raw_acceleration.i16bit[0]/1000);
-        acc_X[i] = value_x;
+        value_x = lsm6dsl_from_fs2g_to_mg( data_raw_acceleration.i16bit[0]);
+        acc_X[i] = value_x/1000;
 
        // NRF_LOG_INFO( NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT(acc_X[i]/1000));
         memset(data_raw_acceleration.u8bit, 0x00, 1*sizeof(int16_t));
         lsm6dsl_fifo_raw_data_get(&dev_ctx, data_raw_acceleration.i16bit, (unsigned int)2);
-        value_y = lsm6dsl_from_fs8g_to_mg( data_raw_acceleration.i16bit[0]/1000);
-        acc_Y[i] = value_y;
+        value_y = lsm6dsl_from_fs2g_to_mg( data_raw_acceleration.i16bit[0]);
+        acc_Y[i] = value_y/1000;
 
      //   NRF_LOG_INFO( NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT(acc_Y[i]));
         memset(data_raw_acceleration.u8bit, 0x00, 1*sizeof(int16_t));
         lsm6dsl_fifo_raw_data_get(&dev_ctx, data_raw_acceleration.i16bit, (unsigned int)2);
-        value_z = lsm6dsl_from_fs8g_to_mg( data_raw_acceleration.i16bit[0]/1000);
-        acc_Z[i] = value_z;
+        value_z = lsm6dsl_from_fs2g_to_mg( data_raw_acceleration.i16bit[0]);
+        acc_Z[i] = value_z/1000;
 
       // NRF_LOG_INFO( NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT(acc_Z[i]));  
       
     }
-    filter_data(gyr_X,MAX_SIZE_HALF,gyr_X_filtered,FILTER_LOWPASS);
+    /*filter_data(gyr_X,MAX_SIZE_HALF,gyr_X_filtered,FILTER_LOWPASS);
     filter_data(gyr_Y,MAX_SIZE_HALF,gyr_Y_filtered,FILTER_LOWPASS);
     filter_data(gyr_Z,MAX_SIZE_HALF,gyr_Z_filtered,FILTER_LOWPASS);
 
     filter_data(acc_X,MAX_SIZE_HALF,acc_X_filtered,FILTER_LOWPASS);
     filter_data(acc_Y,MAX_SIZE_HALF,acc_Y_filtered,FILTER_LOWPASS);
     filter_data(acc_Z,MAX_SIZE_HALF,acc_Z_filtered,FILTER_LOWPASS);
-
+    */
 
     for(int i = 0; i < MAX_SIZE_HALF;i++)
     {
@@ -277,13 +283,25 @@ void fifo_full()
       case STATE_READ_ACC:
             if(read_accelerometer()) //if the acc_N_buffer array is full the function returns "1" and we check the threshold
             {
-              if(start_threshold(acc_Y_buffer,acc_Z_buffer,MAX_SIZE))
-              {
-                state = STATE_READ_ACC_GYR;
+            /* Since the fifo buffer needs to be split in smaller frames a for loop is used to do that 
+             * and at the same time it checks the windows.
+             * NUM_OF_ACC_WINDOWS holds the amount of windows
+             * In the start_thereshold function we increment the acc array pointer by the size of the window
+             * If enough frames are above the threshold the loop breaks and it switches to reading acc and gyro
+             */
+              for(uint8_t i = 0; i < NUM_OF_ACC_WINDOWS; i++){
+              printf("in read acc fun i = %d",i);
+                if(start_threshold((acc_Y + i*ACC_WINDOW), (acc_Y + i*ACC_WINDOW),ACC_WINDOW))
+                {
+                  state = STATE_READ_ACC_GYR;
+                  break;
+                }
+                
+              
               }
             }
             //printf("STATE_READ_ACC\n");
-          
+         state = STATE_READ_ACC_GYR;
           
       break;
       case STATE_READ_ACC_GYR:
@@ -296,18 +314,12 @@ void fifo_full()
                 state = STATE_READ_ACC;
               }
             }
-
+        
       break;
     
     
     }
 
-
-
-     
-
-
-      
       //FIFO data is stored in acc arrays, FIFO can be reset and restart
       
       if(state == STATE_READ_ACC_GYR)
@@ -315,11 +327,11 @@ void fifo_full()
          lsm6dsl_fifo_mode_set(&dev_ctx, LSM6DSL_BYPASS_MODE);   //resets buffer
          //Set Output Data Rate and full scale for acc
          lsm6dsl_xl_data_rate_set(&dev_ctx, LSM6DSL_XL_ODR_52Hz);
-         lsm6dsl_xl_full_scale_set(&dev_ctx, LSM6DSL_8g);
+         lsm6dsl_xl_full_scale_set(&dev_ctx, LSM6DSL_2g);
 
          //Set Output Data Rate and full scale for gyro
          lsm6dsl_gy_data_rate_set(&dev_ctx, LSM6DSL_XL_ODR_52Hz);
-         lsm6dsl_gy_full_scale_set(&dev_ctx, LSM6DSL_8g);
+         lsm6dsl_gy_full_scale_set(&dev_ctx, LSM6DSL_250dps);
          lsm6dsl_fifo_data_rate_set(&dev_ctx, LSM6DSL_FIFO_52Hz);
 
          //enable FTH(fifo stops at selected number of bytes(resolution is 2 bytes))
@@ -329,7 +341,7 @@ void fifo_full()
          
          //Decimation - data to be stored in FIFO
          lsm6dsl_fifo_gy_batch_set(&dev_ctx, LSM6DSL_FIFO_GY_NO_DEC);
-         lsm6dsl_fifo_xl_batch_set(&dev_ctx, LSM6DSL_FIFO_GY_NO_DEC);
+         lsm6dsl_fifo_xl_batch_set(&dev_ctx, LSM6DSL_FIFO_XL_NO_DEC);
        
          lsm6dsl_fifo_mode_set(&dev_ctx, LSM6DSL_FIFO_MODE);//buffer starts
     
@@ -341,7 +353,7 @@ void fifo_full()
          lsm6dsl_gy_data_rate_set(&dev_ctx, LSM6DSL_GY_ODR_OFF);
          //Set Output Data Rate and full scale for acc
          lsm6dsl_xl_data_rate_set(&dev_ctx, LSM6DSL_XL_ODR_52Hz);
-         lsm6dsl_xl_full_scale_set(&dev_ctx, LSM6DSL_8g);
+         lsm6dsl_xl_full_scale_set(&dev_ctx, LSM6DSL_2g);
          lsm6dsl_fifo_data_rate_set(&dev_ctx, LSM6DSL_FIFO_52Hz);  
         
          //lsm6dsl_gy_full_scale_set(&dev_ctx, LSM6DSL_8g);
@@ -349,7 +361,7 @@ void fifo_full()
          //enable FTH(fifo stops at selected number of bytes(resolution is 2 bytes))
          lsm6dsl_fifo_stop_on_wtm_set(&dev_ctx,1);
          //set watermark level
-         lsm6dsl_fifo_watermark_set(&dev_ctx,3*MAX_SIZE_HALF+3);
+         lsm6dsl_fifo_watermark_set(&dev_ctx,3*MAX_SIZE+3);
          
          //Decimation - data to be stored in FIFO
          lsm6dsl_fifo_gy_batch_set(&dev_ctx, LSM6DSL_FIFO_GY_DISABLE);
@@ -393,7 +405,6 @@ void int2_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 }
 int main()
 {
-    
     bsp_board_init(BSP_INIT_LEDS);
     uart_init();
     //Interrupt initialization version 2 (GPIO)
@@ -461,20 +472,31 @@ int main()
      int2_route.int2_inact_state = PROPERTY_DISABLE;
      int2_route.int2_wrist_tilt = PROPERTY_DISABLE;
      lsm6dsl_pin_int2_route_set(&dev_ctx, int2_route);
+      
+     /* Accelerometer - LPF1 path ( LPF2 not used )*/
+     //lsm6dsl_xl_lp1_bandwidth_set(&dev_ctx, LSM6DSL_XL_LP1_ODR_DIV_4);
 
+     /* Accelerometer - LPF1 + LPF2 path */
+     lsm6dsl_xl_lp2_bandwidth_set(&dev_ctx, LSM6DSL_XL_LOW_LAT_LP_ODR_DIV_100);
+
+     /* Gyroscope - filtering chain */
+     lsm6dsl_gy_band_pass_set(&dev_ctx, LSM6DSL_HP_260mHz_LP1_STRONG);
+     lsm6dsl_gy_band_pass_set(&dev_ctx, LSM6DSL_HP_16mHz_LP2);
+
+  
      //Enable Block Data Update
      lsm6dsl_block_data_update_set(&dev_ctx, PROPERTY_ENABLE);
      lsm6dsl_auto_increment_set(&dev_ctx, PROPERTY_ENABLE);
      
      //Set Output Data Rate and full scale for acc
      lsm6dsl_xl_data_rate_set(&dev_ctx, LSM6DSL_XL_ODR_52Hz);
-     lsm6dsl_xl_full_scale_set(&dev_ctx, LSM6DSL_8g);
+     lsm6dsl_xl_full_scale_set(&dev_ctx, LSM6DSL_2g);
 
      //Set FIFO trigger - acc data ready signal
      lsm6dsl_fifo_write_trigger_set(&dev_ctx, LSM6DSL_TRG_XL_GY_DRDY);
      
      //set watermark level
-     lsm6dsl_fifo_watermark_set(&dev_ctx,3*MAX_SIZE_HALF+3);
+     lsm6dsl_fifo_watermark_set(&dev_ctx,3*MAX_SIZE+3);
 
      //enable FTH(fifo stops at selected number of bytes(resolution is 2 bytes))
      lsm6dsl_fifo_stop_on_wtm_set(&dev_ctx,1);

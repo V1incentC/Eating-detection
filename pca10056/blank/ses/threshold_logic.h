@@ -7,7 +7,7 @@
 //defines for start_threshold function
 #define THRESHOLD_1                   -11.7F
 #define THRESHOLD_2                   -11.4F
-#define CONSECUTIVE_BUFFERS_START     2
+#define CONSECUTIVE_BUFFERS_START     5
 int start_threshold(float *arr_1, float *arr_2, int n);
 
 
