@@ -1,5 +1,5 @@
 Output/wristwatch-data_buffering-features\ Debug/Obj/nrfx_twi_twim.o: \
- F:\IJS\SEGGER_Projects\nRF5_SDK_17.0.0_9d13099\modules\nrfx\drivers\src\nrfx_twi_twim.c \
+ E:\IJS\SEGGER_Projects\nRF5_SDK_17.0.0_9d13099\modules\nrfx\drivers\src\nrfx_twi_twim.c \
  ../../../../../../modules/nrfx/nrfx.h \
  ../../../../../../integration/nrfx/nrfx_config.h ../config/sdk_config.h \
  ../../../../../../modules/nrfx/drivers/nrfx_common.h \
@@ -42,4 +42,4 @@ Output/wristwatch-data_buffering-features\ Debug/Obj/nrfx_twi_twim.o: \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/libraries/util/sdk_resources.h \
  ../../../../../../modules/nrfx/drivers/nrfx_errors.h \
- F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/modules/nrfx/hal/nrf_gpio.h
+ ../../../../../../modules/nrfx/hal/nrf_gpio.h

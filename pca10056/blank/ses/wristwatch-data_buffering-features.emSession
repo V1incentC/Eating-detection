@@ -1,7 +1,9 @@
 <!DOCTYPE CrossStudio_Session_File>
 <session>
  <Bookmarks/>
- <Breakpoints groups="Breakpoints" active_group="Breakpoints"/>
+ <Breakpoints groups="Breakpoints" active_group="Breakpoints">
+  <BreakpointListItem trigger="" line="267" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="../../../main.c" useHWbreakpoint="false"/>
+ </Breakpoints>
  <ExecutionProfileWindow/>
  <FrameBufferWindow>
   <FrameBufferWindow bufferHeight="-1" addressSpace="" addressText="" bufferWidth="-1"/>
@@ -45,7 +47,9 @@
   <Trace enabled="Yes"/>
  </TraceWindow>
  <Watch1>
-  <Watches active="1" update="Never"/>
+  <Watches active="1" update="Never">
+   <Watchpoint expression="gyr_X_buffer" name="gyr_X_buffer" radix="10" linenumber="0" filename="../ses"/>
+  </Watches>
  </Watch1>
  <Watch2>
   <Watches active="0" update="Never"/>
@@ -57,14 +61,16 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="15" y="290" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../main.c" selected="1" top="270" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="16" useTextEdit="1" openedFrom="F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/examples/1myprojects/wristwatch-data_buffering-features/main.c" useBinaryEdit="0" left="0" path="threshold_logic.c" selected="0" top="94" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="9" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="threshold_logic.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="309" useTextEdit="1" openedFrom="F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/examples/1myprojects/wristwatch-data_buffering-features/main.c" useBinaryEdit="0" left="0" path="filter_logic.c" selected="0" top="281" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="48" y="249" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../main.c" selected="0" top="237" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="26" y="41" useTextEdit="1" openedFrom="F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/examples/1myprojects/wristwatch-data_buffering-features/main.c" useBinaryEdit="0" left="0" path="threshold_logic.c" selected="1" top="23" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="21" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="threshold_logic.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="309" useTextEdit="1" openedFrom="F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/examples/1myprojects/wristwatch-data_buffering-features/main.c" useBinaryEdit="0" left="0" path="filter_logic.c" selected="0" top="287" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="7" useTextEdit="1" openedFrom="F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/examples/1myprojects/wristwatch-data_buffering-features/pca10056/blank/ses/filter_logic.c" useBinaryEdit="0" left="0" path="filter_logic.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="2259" useTextEdit="1" openedFrom="F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/examples/1myprojects/wristwatch-data_buffering-features/main.c" useBinaryEdit="0" left="0" path="lsm6dsl_reg.c" selected="0" top="2247" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="2259" useTextEdit="1" openedFrom="F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/examples/1myprojects/wristwatch-data_buffering-features/main.c" useBinaryEdit="0" left="0" path="lsm6dsl_reg.c" selected="0" top="2259" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="1012" useTextEdit="1" openedFrom="F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/examples/1myprojects/wristwatch-data_buffering-features/pca10056/blank/ses/lsm6dsl_reg.c" useBinaryEdit="0" left="0" path="lsm6dsl_reg.h" selected="0" top="996" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="1373" useTextEdit="1" openedFrom="F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/examples/1myprojects/wristwatch-data_buffering-features/main.c" useBinaryEdit="0" left="0" path="../../../../wristband_gyro_and_accelometer_DSP_include/pca10056/blank/ses/lsm6dsl_reg.h" selected="0" top="1357" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="20" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="calculation_features.c" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="9" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="calculation_features.h" selected="0" top="0" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="wristwatch-data_buffering-features" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="../../Source/FilteringFunctions/arm_conv_f32.c&#xa;F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/examples/1myprojects/CMSIS_5-5.7.0/CMSIS/DSP/Source/FilteringFunctions/arm_conv_f32.c" fileDialogInitialDirectory="F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/examples/1myprojects/CMSIS_5-5.7.0/CMSIS/DSP/Source/FilteringFunctions" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

@@ -7,13 +7,7 @@
 #include <time.h>
 #include "arm_math.h"
 
-extern float acc_X_buffer[];
-extern float acc_Y_buffer[];
-extern float acc_Z_buffer[];
 
-extern float gyr_X_buffer[];
-extern float gyr_Y_buffer[];
-extern float gyr_Z_buffer[];
 
 extern const float window[];
 

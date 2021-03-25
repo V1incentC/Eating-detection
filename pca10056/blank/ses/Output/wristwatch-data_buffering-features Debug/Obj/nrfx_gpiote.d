@@ -1,5 +1,5 @@
 Output/wristwatch-data_buffering-features\ Debug/Obj/nrfx_gpiote.o: \
- F:\IJS\SEGGER_Projects\nRF5_SDK_17.0.0_9d13099\modules\nrfx\drivers\src\nrfx_gpiote.c \
+ E:\IJS\SEGGER_Projects\nRF5_SDK_17.0.0_9d13099\modules\nrfx\drivers\src\nrfx_gpiote.c \
  ../../../../../../modules/nrfx/nrfx.h \
  ../../../../../../integration/nrfx/nrfx_config.h ../config/sdk_config.h \
  ../../../../../../modules/nrfx/drivers/nrfx_common.h \
@@ -42,10 +42,10 @@ Output/wristwatch-data_buffering-features\ Debug/Obj/nrfx_gpiote.o: \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/libraries/util/sdk_resources.h \
  ../../../../../../modules/nrfx/drivers/nrfx_errors.h \
- F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/modules/nrfx/drivers/include/nrfx_gpiote.h \
+ ../../../../../../modules/nrfx/drivers/include/nrfx_gpiote.h \
  ../../../../../../modules/nrfx/hal/nrf_gpiote.h \
  ../../../../../../modules/nrfx/hal/nrf_gpio.h \
- F:/IJS/SEGGER_Projects/nRF5_SDK_17.0.0_9d13099/modules/nrfx/drivers/include/nrf_bitmask.h \
+ ../../../../../../components/libraries/util/nrf_bitmask.h \
  D:/Program\ files/SeggerIDE/include/string.h \
  ../../../../../../integration/nrfx/nrfx_log.h \
  ../../../../../../components/libraries/log/nrf_log.h \

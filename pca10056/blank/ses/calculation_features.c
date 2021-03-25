@@ -12,7 +12,13 @@
 int nfft; //this value is used for discrete fourier transform
 //nfft = m;
  //This value is calculated using the windowing values and the frequency.
+extern float acc_X_buffer[];
+extern float acc_Y_buffer[];
+extern float acc_Z_buffer[];
 
+extern float gyr_X_buffer[];
+extern float gyr_Y_buffer[];
+extern float gyr_Z_buffer[];
 
 
 
