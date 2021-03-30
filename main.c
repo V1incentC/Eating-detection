@@ -318,6 +318,14 @@ void fifo_full()
               if(firstFlag == 1){
                 firstFlag = 0;
               }else{
+              
+              // Before making predictions, we have to calculate features for AccX, AccY, AccZ, GyrX, GyrY, GyrZ
+              // Initially we will calculate all the features that we have for each axis of both Accelerometer and Gyroscope sensor
+              // we need six calls to void CF_fill_features_arr(float32_t* features, float32_t* input_arr) which calculates the features implemented
+              
+              
+              
+              
                //predict();
               }
 
